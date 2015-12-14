@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Controller
 public class SearchController {
@@ -22,7 +25,15 @@ public class SearchController {
 
     @RequestMapping(value="/search")
     @ResponseBody
-    public Object search(@RequestParam("q") String q) {
+    public Object search(@RequestParam("q") String q, @RequestParam(value = "max", required = false) Integer max) {
+        //We need add 2 headers, so we use a HashMap with the keyword and the limit number
+        Map<String,Object> headers = new HashMap<String,Object>();
+        //Add keyword
+        headers.put("CamelTwitterKeywords", q);
+        //If exists, add number
+        if(max!=null){
+            headers.put("CamelTwitterCount", max);
+        }
         return producerTemplate.requestBodyAndHeader("direct:search", "", "CamelTwitterKeywords", q);
     }
 }
