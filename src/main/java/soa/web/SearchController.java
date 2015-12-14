@@ -34,6 +34,6 @@ public class SearchController {
         if(max!=null){
             headers.put("CamelTwitterCount", max);
         }
-        return producerTemplate.requestBodyAndHeader("direct:search", "", "CamelTwitterKeywords", q);
+        return producerTemplate.requestBodyAndHeaders("direct:search", "", headers);
     }
 }
